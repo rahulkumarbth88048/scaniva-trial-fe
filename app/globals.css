@@ -75,7 +75,9 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 1rem;
+  gap: 0.8rem;
+  margin-bottom: 0.8rem;
+  flex-wrap: wrap;
 }
 
 .eyebrow {
@@ -91,6 +93,47 @@ body {
   font-size: clamp(1.5rem, 4vw, 2.4rem);
 }
 
+.timer-badge {
+  margin: 0;
+  padding: 0.55rem 0.8rem;
+  border-radius: 999px;
+  background: #2f6d4d;
+  color: #edfff5;
+  border: 1px solid #2a5e43;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.journey-strip {
+  margin-bottom: 1rem;
+  display: flex;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+}
+
+.journey-step {
+  text-transform: capitalize;
+  font-size: 0.78rem;
+  background: #fbeccf;
+  color: #75542d;
+  border: 1px solid #e2c38b;
+  border-radius: 999px;
+  padding: 0.35rem 0.7rem;
+}
+
+.journey-step.active {
+  background: #2d6548;
+  color: #f0fff8;
+  border-color: #28573d;
+}
+
+.journey-step.done {
+  background: #d9efde;
+  color: #1f5637;
+  border-color: #9fceb0;
+}
+
 .panel {
   border-radius: 28px;
   background: rgba(255, 255, 255, 0.74);
@@ -98,6 +141,7 @@ body {
   border: 1px solid rgba(191, 154, 90, 0.3);
   box-shadow: 0 14px 35px rgba(49, 28, 0, 0.12);
   padding: clamp(1rem, 2.6vw, 2rem);
+  animation: panelIn 0.5s ease;
 }
 
 .center-panel {
@@ -119,6 +163,32 @@ body {
   font-weight: 650;
 }
 
+.highlight-grid {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  display: grid;
+  gap: 0.7rem;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.highlight-card {
+  text-align: left;
+  padding: 0.8rem;
+  border-radius: 14px;
+  border: 1px solid #ecd3ab;
+  background: linear-gradient(140deg, #fffef9, #fff5e4);
+}
+
+.highlight-card h3,
+.highlight-card p {
+  margin: 0;
+}
+
+.highlight-card p {
+  margin-top: 0.35rem;
+  color: #644b2b;
+}
+
 .tag-grid {
   display: grid;
   gap: 0.8rem;
@@ -137,6 +207,7 @@ body {
   text-align: left;
   transition: transform 0.2s ease;
   cursor: pointer;
+  min-height: 44px;
 }
 
 .tag-btn:hover {
@@ -160,6 +231,58 @@ body {
 
 .section-head h2 {
   margin: 0;
+}
+
+.engagement-band {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin-bottom: 1rem;
+  padding: 0.8rem;
+  border-radius: 14px;
+  background: linear-gradient(140deg, #f8f2ff, #fff5e6);
+  border: 1px solid #e0cff6;
+}
+
+.band-label {
+  margin: 0;
+  font-size: 0.77rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #654e80;
+}
+
+.score-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.score-track {
+  width: min(250px, 50vw);
+  height: 10px;
+  border-radius: 999px;
+  background: #eadcf8;
+  overflow: hidden;
+}
+
+.score-track span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #7f66cc, #f7a94c);
+  transition: width 0.35s ease;
+}
+
+.pulse-chip {
+  margin: 0;
+  padding: 0.45rem 0.7rem;
+  border-radius: 999px;
+  background: #342449;
+  color: #f8ecff;
+  font-size: 0.78rem;
+  animation: pulse 1.6s ease-in-out infinite;
 }
 
 .swiper-wrap {
@@ -204,6 +327,7 @@ body {
   display: flex;
   align-items: baseline;
   gap: 0.7rem;
+  flex-wrap: wrap;
 }
 
 .price-now {
@@ -221,6 +345,15 @@ body {
   color: #6d5a42;
 }
 
+.offer-line {
+  margin: 0;
+  background: #ebf8f0;
+  border: 1px solid #b9dfc9;
+  border-radius: 10px;
+  color: #215235;
+  padding: 0.45rem 0.6rem;
+}
+
 .color-row {
   display: flex;
   gap: 0.45rem;
@@ -231,6 +364,13 @@ body {
   height: 20px;
   border-radius: 100%;
   border: 1px solid #b28f62;
+}
+
+.swipe-hint {
+  margin: 0.8rem 0 0;
+  text-align: center;
+  color: #6e5330;
+  font-size: 0.85rem;
 }
 
 .dots {
@@ -274,6 +414,14 @@ body {
   margin: 0;
 }
 
+.confidence-note {
+  display: inline-block;
+  background: #4d4737;
+  border: 1px solid #756f5f;
+  border-radius: 10px;
+  padding: 0.45rem 0.55rem;
+}
+
 .choice-row {
   display: flex;
   flex-wrap: wrap;
@@ -286,6 +434,7 @@ body {
   border-radius: 12px;
   padding: 0.5rem 0.7rem;
   cursor: pointer;
+  min-height: 44px;
 }
 
 .choice.active {
@@ -321,10 +470,20 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
 }
 
 .checkout-row p {
   margin: 0;
+}
+
+.save-badge {
+  color: #205735;
+  background: #e6f6ec;
+  border: 1px solid #b2dabc;
+  border-radius: 999px;
+  padding: 0.42rem 0.65rem;
 }
 
 .payment-panel {
@@ -333,6 +492,12 @@ body {
 
 .payment-panel h2 {
   margin-top: 0;
+}
+
+.success-note {
+  margin: 0 0 1rem;
+  color: #2b5e46;
+  font-weight: 650;
 }
 
 .qr-box {
@@ -377,6 +542,7 @@ body {
   background: #2f6d4d;
   color: #f3fff8;
   padding: 0.7rem 1rem;
+  min-height: 44px;
 }
 
 .solid-btn:disabled {
@@ -389,6 +555,7 @@ body {
   color: #442f12;
   padding: 0.64rem 1rem;
   border: 1px solid #d9ba84;
+  min-height: 44px;
 }
 
 .mini-btn {
@@ -397,6 +564,7 @@ body {
   background: #fff7e9;
   border: 1px solid #debf8e;
   color: #5c431f;
+  min-height: 38px;
 }
 
 .nav-btn {
@@ -404,6 +572,13 @@ body {
   height: 44px;
   background: #fcefd7;
   border: 1px solid #e2c590;
+}
+
+button:focus-visible,
+input:focus-visible,
+article[role="button"]:focus-visible {
+  outline: 3px solid #24583e;
+  outline-offset: 2px;
 }
 
 .overlay {
@@ -423,11 +598,33 @@ body {
   border-radius: 18px;
   padding: 1rem;
   box-shadow: 0 16px 42px rgba(0, 0, 0, 0.22);
+  max-height: calc(100vh - 2rem);
+  overflow-y: auto;
 }
 
 .otp-modal h3,
 .otp-modal p {
   margin-top: 0;
+}
+
+.modal-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.8rem;
+}
+
+.icon-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  border: 1px solid #d8b57f;
+  background: #fff;
+  color: #4a3210;
+  cursor: pointer;
+  font-size: 1.1rem;
+  line-height: 1;
+  flex-shrink: 0;
 }
 
 .otp-modal label {
@@ -450,6 +647,10 @@ body {
 .error-text {
   color: #b8182f;
   margin: 0.2rem 0 0.8rem;
+}
+
+.otp-modal .inline-actions {
+  justify-content: flex-end;
 }
 
 .offer-marquee {
@@ -498,6 +699,35 @@ body {
   }
 }
 
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+
+  50% {
+    transform: scale(1.02);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+}
+
+@keyframes panelIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @media (max-width: 860px) {
   .detail-layout {
     grid-template-columns: 1fr;
@@ -514,5 +744,9 @@ body {
 
   .product-card {
     min-height: auto;
+  }
+
+  .score-track {
+    width: min(190px, 52vw);
   }
 }

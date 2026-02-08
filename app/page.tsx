@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 type Product = {
   id: string;
@@ -130,9 +130,39 @@ export default function Home() {
   const [otp, setOtp] = useState("");
   const [formError, setFormError] = useState("");
   const [itemToAdd, setItemToAdd] = useState<CartItem | null>(null);
+  const [offerCountdown, setOfferCountdown] = useState(900);
 
   const activeProduct = detected[activeIndex] ?? null;
   const qrMask = useMemo(() => createQrMask(), []);
+  const screenOrder: Screen[] = ["idle", "catalog", "detail", "cart", "payment"];
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setOfferCountdown((prev) => (prev > 0 ? prev - 1 : 0));
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  const closeOtpForm = useCallback(() => {
+    setShowOtpForm(false);
+    setFormError("");
+    setOtp("");
+    setItemToAdd(null);
+  }, []);
+
+  useEffect(() => {
+    if (!showOtpForm) return;
+
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        closeOtpForm();
+      }
+    };
+
+    window.addEventListener("keydown", handleEscape);
+    return () => window.removeEventListener("keydown", handleEscape);
+  }, [showOtpForm, closeOtpForm]);
 
   const scanTag = (product: Product) => {
     setDetected((prev) => {
@@ -176,14 +206,18 @@ export default function Home() {
     }
 
     setCartItems((prev) => [...prev, itemToAdd]);
-    setShowOtpForm(false);
-    setItemToAdd(null);
-    setOtp("");
-    setFormError("");
+    closeOtpForm();
     setScreen("cart");
   };
 
   const total = cartItems.reduce((sum, item) => sum + item.product.discountPrice, 0);
+  const originalTotal = cartItems.reduce((sum, item) => sum + item.product.price, 0);
+  const totalSavings = originalTotal - total;
+  const styleScore = activeProduct
+    ? 72 + ((activeIndex + cartItems.length + detected.length) % 24)
+    : 0;
+  const minutes = String(Math.floor(offerCountdown / 60)).padStart(2, "0");
+  const seconds = String(offerCountdown % 60).padStart(2, "0");
 
   return (
     <div className="trialroom-app">
@@ -196,10 +230,28 @@ export default function Home() {
             <p className="eyebrow">Smart Trial Room</p>
             <h1>Scaniva Mirror</h1>
           </div>
-          <button className="ghost-btn" onClick={() => setScreen("idle")}>
-            Reset
-          </button>
+          <div className="inline-actions">
+            <p className="timer-badge">Offer ends in {minutes}:{seconds}</p>
+            <button className="ghost-btn" onClick={() => setScreen("idle")}>
+              Reset
+            </button>
+          </div>
         </header>
+
+        <nav className="journey-strip" aria-label="Journey progress">
+          {screenOrder.map((step, index) => {
+            const active = screen === step;
+            const done = screenOrder.indexOf(screen) > index;
+            return (
+              <span
+                key={step}
+                className={active ? "journey-step active" : done ? "journey-step done" : "journey-step"}
+              >
+                {step}
+              </span>
+            );
+          })}
+        </nav>
 
         {screen === "idle" && (
           <section className="panel center-panel">
@@ -208,6 +260,20 @@ export default function Home() {
             <p>
               Each garment has an RFID tag. Tap any tag below to simulate auto-detection.
             </p>
+            <div className="highlight-grid">
+              <article className="highlight-card">
+                <h3>Touch First Experience</h3>
+                <p>Large tap targets and instant actions optimized for mirror screens.</p>
+              </article>
+              <article className="highlight-card">
+                <h3>Smart Recommendations</h3>
+                <p>Discover matching items, popular size trends, and current offers.</p>
+              </article>
+              <article className="highlight-card">
+                <h3>Fast Checkout</h3>
+                <p>One-tap cart flow with OTP verification and QR payment support.</p>
+              </article>
+            </div>
             <div className="tag-grid">
               {PRODUCTS.map((item) => (
                 <button
@@ -240,6 +306,19 @@ export default function Home() {
               </div>
             </div>
 
+            <div className="engagement-band">
+              <div>
+                <p className="band-label">Style Match Score</p>
+                <div className="score-row">
+                  <strong>{styleScore}%</strong>
+                  <div className="score-track">
+                    <span style={{ width: `${styleScore}%` }} />
+                  </div>
+                </div>
+              </div>
+              <p className="pulse-chip">Trending in your store right now</p>
+            </div>
+
             {activeProduct ? (
               <>
                 <div className="swiper-wrap">
@@ -250,13 +329,23 @@ export default function Home() {
                         prev === 0 ? detected.length - 1 : prev - 1,
                       )
                     }
+                    aria-label="Show previous product"
+                    type="button"
                   >
-                    ◀
+                    {"<"}
                   </button>
 
                   <article
                     className="product-card"
                     onClick={() => openDetail(activeProduct)}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(event) => {
+                      if (event.key === "Enter" || event.key === " ") {
+                        event.preventDefault();
+                        openDetail(activeProduct);
+                      }
+                    }}
                   >
                     <p className="type-pill">{activeProduct.type}</p>
                     <h3>{activeProduct.name}</h3>
@@ -271,6 +360,13 @@ export default function Home() {
                     </div>
                     <p className="meta-row">
                       Sizes: {activeProduct.sizes.join(" / ")}
+                    </p>
+                    <p className="offer-line">
+                      You save{" "}
+                      <strong>
+                        {formatPrice(activeProduct.price - activeProduct.discountPrice)}
+                      </strong>{" "}
+                      on this item
                     </p>
                     <div className="color-row">
                       {activeProduct.colors.map((color) => (
@@ -292,6 +388,7 @@ export default function Home() {
                           activeProduct.colors[0].name,
                         );
                       }}
+                      type="button"
                     >
                       Add To Cart
                     </button>
@@ -304,8 +401,10 @@ export default function Home() {
                         prev === detected.length - 1 ? 0 : prev + 1,
                       )
                     }
+                    aria-label="Show next product"
+                    type="button"
                   >
-                    ▶
+                    {">"}
                   </button>
                 </div>
 
@@ -315,9 +414,15 @@ export default function Home() {
                       key={item.id}
                       className={index === activeIndex ? "dot active" : "dot"}
                       onClick={() => setActiveIndex(index)}
+                      aria-label={`View product ${index + 1}`}
+                      type="button"
                     />
                   ))}
                 </div>
+
+                <p className="swipe-hint">
+                  Tap product for detail view and bring-to-me request.
+                </p>
               </>
             ) : (
               <p>No product detected.</p>
@@ -395,6 +500,7 @@ export default function Home() {
                 Selected: <strong>{selectedSize}</strong> /{" "}
                 <strong>{selectedColor}</strong>
               </p>
+              <p className="confidence-note">89% customers liked this fit combination</p>
               <button className="solid-btn">Notify Staff</button>
             </aside>
           </section>
@@ -431,6 +537,7 @@ export default function Home() {
               <p>
                 Total <strong>{formatPrice(total)}</strong>
               </p>
+              <p className="save-badge">You saved {formatPrice(totalSavings)}</p>
               <button
                 className="solid-btn"
                 onClick={() => setScreen("payment")}
@@ -455,6 +562,7 @@ export default function Home() {
               ))}
             </div>
             <p className="meta-row">Order Amount: {formatPrice(total)}</p>
+            <p className="success-note">Secure payment. Your session auto-locks after payment.</p>
             <div className="inline-actions">
               <button className="ghost-btn" onClick={() => setScreen("cart")}>
                 Back To Cart
@@ -481,10 +589,22 @@ export default function Home() {
       </div>
 
       {showOtpForm && (
-        <div className="overlay">
-          <div className="otp-modal">
-            <h3>Complete Add To Cart</h3>
-            <p>Enter details and OTP verification.</p>
+        <div className="overlay" onClick={closeOtpForm}>
+          <div className="otp-modal" onClick={(event) => event.stopPropagation()}>
+            <div className="modal-head">
+              <div>
+                <h3>Complete Add To Cart</h3>
+                <p>Enter details and OTP verification.</p>
+              </div>
+              <button
+                className="icon-btn"
+                onClick={closeOtpForm}
+                aria-label="Close add to cart form"
+                type="button"
+              >
+                x
+              </button>
+            </div>
             <label>
               Name
               <input
@@ -506,17 +626,19 @@ export default function Home() {
               OTP
               <input
                 value={otp}
-                onChange={(event) => setOtp(event.target.value)}
+                onChange={(event) => setOtp(event.target.value.replace(/\D/g, ""))}
                 placeholder="6-digit OTP"
                 maxLength={6}
+                inputMode="numeric"
+                pattern="[0-9]*"
               />
             </label>
             {formError && <p className="error-text">{formError}</p>}
             <div className="inline-actions">
-              <button className="ghost-btn" onClick={() => setShowOtpForm(false)}>
+              <button className="ghost-btn" onClick={closeOtpForm} type="button">
                 Cancel
               </button>
-              <button className="solid-btn" onClick={confirmAddToCart}>
+              <button className="solid-btn" onClick={confirmAddToCart} type="button">
                 Verify & Add
               </button>
             </div>
