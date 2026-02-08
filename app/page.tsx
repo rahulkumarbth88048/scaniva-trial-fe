@@ -589,50 +589,55 @@ export default function Home() {
       </div>
 
       {showOtpForm && (
-        <div className="overlay" onClick={closeOtpForm}>
-          <div className="otp-modal" onClick={(event) => event.stopPropagation()}>
+        <div className="overlay">
+          <div
+            className="otp-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="otp-title"
+          >
+            <button
+              className="icon-btn modal-close"
+              onClick={closeOtpForm}
+              aria-label="Close add to cart form"
+              type="button"
+            >
+              &times;
+            </button>
             <div className="modal-head">
-              <div>
-                <h3>Complete Add To Cart</h3>
-                <p>Enter details and OTP verification.</p>
-              </div>
-              <button
-                className="icon-btn"
-                onClick={closeOtpForm}
-                aria-label="Close add to cart form"
-                type="button"
-              >
-                x
-              </button>
+              <h3 id="otp-title">Complete Add To Cart</h3>
+              <p>Enter details and OTP verification.</p>
             </div>
-            <label>
-              Name
-              <input
-                value={customerName}
-                onChange={(event) => setCustomerName(event.target.value)}
-                placeholder="Enter full name"
-              />
-            </label>
-            <label>
-              Email
-              <input
-                value={customerEmail}
-                onChange={(event) => setCustomerEmail(event.target.value)}
-                placeholder="Enter email"
-                type="email"
-              />
-            </label>
-            <label>
-              OTP
-              <input
-                value={otp}
-                onChange={(event) => setOtp(event.target.value.replace(/\D/g, ""))}
-                placeholder="6-digit OTP"
-                maxLength={6}
-                inputMode="numeric"
-                pattern="[0-9]*"
-              />
-            </label>
+            <div className="otp-form-grid">
+              <label>
+                Name
+                <input
+                  value={customerName}
+                  onChange={(event) => setCustomerName(event.target.value)}
+                  placeholder="Enter full name"
+                />
+              </label>
+              <label>
+                Email
+                <input
+                  value={customerEmail}
+                  onChange={(event) => setCustomerEmail(event.target.value)}
+                  placeholder="Enter email"
+                  type="email"
+                />
+              </label>
+              <label>
+                OTP
+                <input
+                  value={otp}
+                  onChange={(event) => setOtp(event.target.value.replace(/\D/g, ""))}
+                  placeholder="6-digit OTP"
+                  maxLength={6}
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                />
+              </label>
+            </div>
             {formError && <p className="error-text">{formError}</p>}
             <div className="inline-actions">
               <button className="ghost-btn" onClick={closeOtpForm} type="button">
@@ -648,3 +653,4 @@ export default function Home() {
     </div>
   );
 }
+
