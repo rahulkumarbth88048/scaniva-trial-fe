@@ -304,6 +304,19 @@ body {
   gap: 0.75rem;
 }
 
+.product-media {
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid #ead4b0;
+  background: #fff;
+}
+
+.product-image {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
 .detail-main {
   cursor: default;
 }

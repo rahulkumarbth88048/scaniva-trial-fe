@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 type Product = {
@@ -7,6 +8,7 @@ type Product = {
   tagId: string;
   name: string;
   type: string;
+  image: string;
   price: number;
   discountPrice: number;
   sizes: string[];
@@ -27,6 +29,7 @@ const PRODUCTS: Product[] = [
     tagId: "RFID-1001",
     name: "Urban Flex Shirt",
     type: "Slim Fit",
+    image: "/products/urban-flex-shirt.svg",
     price: 2499,
     discountPrice: 1799,
     sizes: ["S", "M", "L", "XL"],
@@ -43,6 +46,7 @@ const PRODUCTS: Product[] = [
     tagId: "RFID-1002",
     name: "Metro Chino",
     type: "Tapered",
+    image: "/products/metro-chino.svg",
     price: 3199,
     discountPrice: 2399,
     sizes: ["30", "32", "34", "36"],
@@ -59,6 +63,7 @@ const PRODUCTS: Product[] = [
     tagId: "RFID-1003",
     name: "Evening Blazer",
     type: "Regular Fit",
+    image: "/products/evening-blazer.svg",
     price: 6799,
     discountPrice: 4999,
     sizes: ["M", "L", "XL", "XXL"],
@@ -395,6 +400,16 @@ export default function Home() {
                       }
                     }}
                   >
+                    <div className="product-media">
+                      <Image
+                        src={activeProduct.image}
+                        alt={activeProduct.name}
+                        width={840}
+                        height={560}
+                        className="product-image"
+                        priority
+                      />
+                    </div>
                     <p className="type-pill">{activeProduct.type}</p>
                     <h3>{activeProduct.name}</h3>
                     <p>{activeProduct.description}</p>
@@ -481,6 +496,15 @@ export default function Home() {
         {screen === "detail" && selectedProduct && (
           <section className="panel detail-layout">
             <article className="product-card detail-main">
+              <div className="product-media">
+                <Image
+                  src={selectedProduct.image}
+                  alt={selectedProduct.name}
+                  width={840}
+                  height={560}
+                  className="product-image"
+                />
+              </div>
               <p className="type-pill">{selectedProduct.type}</p>
               <h2>{selectedProduct.name}</h2>
               <p>{selectedProduct.description}</p>
