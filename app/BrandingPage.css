@@ -1,0 +1,141 @@
+/* Reset */
+body {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+}
+
+/* Full Screen Wrapper */
+.branding-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Images */
+.image {
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+}
+
+.left-image {
+  left: 0;
+  background-image: url("https://images.unsplash.com/photo-1494790108377-be9c29b29330");
+}
+
+.right-image {
+  right: 0;
+  background-image: url("https://images.unsplash.com/photo-1524504388940-b1c1722653e1");
+}
+
+/* Center Transparent Image */
+.center-overlay-image {
+  position: absolute;
+  top: 0%;
+  left: 50%;
+  transform: translate(-50%, 0%);
+  
+  width: 500px; /* match collection card width */
+  height: 100%;
+
+  background-image: url("https://images.unsplash.com/photo-1681951093228-47c246e9d016?q=80&w=735&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+  background-size: cover;
+  background-position: center;
+
+  opacity: 0.7;/* lower opacity */
+  
+  z-index: 1; /* below card */
+}
+
+
+/* Center Card */
+.collection-card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgb(238, 234, 234);
+  padding: 20px 70px;
+  text-align: center;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+  z-index: 2;
+}
+
+.collection-card hr {
+  margin: 2px auto;
+  width: 100%;
+  border: none;
+  border-top: 1px solid rgb(65, 25, 25);
+}
+.collection {
+  font-size: 40px;
+  color: rgb(65, 25, 25);
+  margin: 6px;
+}
+.new-style {
+  font-style: oblique;
+  font-size: 30px;
+  color: rgb(65, 25, 25);
+  margin: 6px;
+}
+
+.subtitle {
+  font-size: 30px;
+  color: rgb(65, 25, 25);
+  margin-top: 6px;
+}
+
+/* Offer Marquee */
+.offer-marquee {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background: #ff4da6;
+  overflow: hidden;
+  white-space: nowrap;
+  padding: 14px 0;
+  z-index: 3;
+}
+
+.offer-track {
+  display: inline-flex;
+  width: max-content;
+  animation: scroll-left 20s linear infinite;
+}
+
+.offer-track span {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  padding-right: 100px;
+}
+
+/* Animation */
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .collection-card {
+    padding: 25px 40px;
+  }
+
+  .collection-card h1 {
+    font-size: 22px;
+  }
+
+  .image {
+    width: 100%;
+    opacity: 0.4;
+  }
+}
