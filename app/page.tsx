@@ -18,6 +18,7 @@ type CartItem = {
   product: Product;
   size: string;
   color: string;
+  quantity: number;
 };
 
 const PRODUCTS: Product[] = [
@@ -72,6 +73,7 @@ const PRODUCTS: Product[] = [
 ];
 
 type Screen = "idle" | "catalog" | "detail" | "cart" | "payment";
+const OFFER_DURATION_SECONDS = 900;
 
 const formatPrice = (value: number) =>
   new Intl.NumberFormat("en-IN", {
@@ -130,7 +132,7 @@ export default function Home() {
   const [otp, setOtp] = useState("");
   const [formError, setFormError] = useState("");
   const [itemToAdd, setItemToAdd] = useState<CartItem | null>(null);
-  const [offerCountdown, setOfferCountdown] = useState(900);
+  const [offerCountdown, setOfferCountdown] = useState(OFFER_DURATION_SECONDS);
 
   const activeProduct = detected[activeIndex] ?? null;
   const qrMask = useMemo(() => createQrMask(), []);
@@ -138,7 +140,9 @@ export default function Home() {
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setOfferCountdown((prev) => (prev > 0 ? prev - 1 : 0));
+      setOfferCountdown((prev) =>
+        prev > 1 ? prev - 1 : OFFER_DURATION_SECONDS,
+      );
     }, 1000);
 
     return () => clearInterval(timer);
@@ -184,7 +188,7 @@ export default function Home() {
   };
 
   const startAddToCart = (product: Product, size: string, color: string) => {
-    setItemToAdd({ product, size, color });
+    setItemToAdd({ product, size, color, quantity: 1 });
     setShowOtpForm(true);
     setFormError("");
   };
@@ -205,13 +209,57 @@ export default function Home() {
       return;
     }
 
-    setCartItems((prev) => [...prev, itemToAdd]);
+    setCartItems((prev) => {
+      const existingIndex = prev.findIndex(
+        (item) =>
+          item.product.id === itemToAdd.product.id &&
+          item.size === itemToAdd.size &&
+          item.color === itemToAdd.color,
+      );
+
+      if (existingIndex === -1) {
+        return [...prev, itemToAdd];
+      }
+
+      return prev.map((item, index) =>
+        index === existingIndex
+          ? { ...item, quantity: item.quantity + itemToAdd.quantity }
+          : item,
+      );
+    });
     closeOtpForm();
     setScreen("cart");
   };
 
-  const total = cartItems.reduce((sum, item) => sum + item.product.discountPrice, 0);
-  const originalTotal = cartItems.reduce((sum, item) => sum + item.product.price, 0);
+  const updateCartQuantity = (index: number, delta: number) => {
+    setCartItems((prev) =>
+      prev.flatMap((item, itemIndex) => {
+        if (itemIndex !== index) {
+          return [item];
+        }
+
+        const nextQuantity = item.quantity + delta;
+        if (nextQuantity <= 0) {
+          return [];
+        }
+
+        return [{ ...item, quantity: nextQuantity }];
+      }),
+    );
+  };
+
+  const removeCartItem = (index: number) => {
+    setCartItems((prev) => prev.filter((_, itemIndex) => itemIndex !== index));
+  };
+
+  const total = cartItems.reduce(
+    (sum, item) => sum + item.product.discountPrice * item.quantity,
+    0,
+  );
+  const originalTotal = cartItems.reduce(
+    (sum, item) => sum + item.product.price * item.quantity,
+    0,
+  );
   const totalSavings = originalTotal - total;
   const styleScore = activeProduct
     ? 72 + ((activeIndex + cartItems.length + detected.length) % 24)
@@ -527,7 +575,35 @@ export default function Home() {
                         Size: {item.size} | Color: {item.color} | {item.product.type}
                       </p>
                     </div>
-                    <strong>{formatPrice(item.product.discountPrice)}</strong>
+                    <div className="cart-item-actions">
+                      <div className="qty-control">
+                        <button
+                          className="qty-btn"
+                          onClick={() => updateCartQuantity(index, -1)}
+                          aria-label={`Decrease quantity of ${item.product.name}`}
+                          type="button"
+                        >
+                          -
+                        </button>
+                        <span>{item.quantity}</span>
+                        <button
+                          className="qty-btn"
+                          onClick={() => updateCartQuantity(index, 1)}
+                          aria-label={`Increase quantity of ${item.product.name}`}
+                          type="button"
+                        >
+                          +
+                        </button>
+                      </div>
+                      <strong>{formatPrice(item.product.discountPrice * item.quantity)}</strong>
+                      <button
+                        className="remove-btn"
+                        onClick={() => removeCartItem(index)}
+                        type="button"
+                      >
+                        Remove
+                      </button>
+                    </div>
                   </article>
                 ))}
               </div>
