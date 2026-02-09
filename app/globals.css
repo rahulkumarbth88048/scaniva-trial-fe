@@ -456,11 +456,51 @@ body {
   justify-content: space-between;
   gap: 0.8rem;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .cart-item h4,
 .cart-item p {
   margin: 0;
+}
+
+.cart-item-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  flex-wrap: wrap;
+}
+
+.qty-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.2rem 0.3rem;
+  border-radius: 999px;
+  border: 1px solid #d8bb8a;
+  background: #fff3dc;
+}
+
+.qty-btn {
+  border: 1px solid #cba468;
+  background: #fff;
+  color: #50350f;
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.remove-btn {
+  border: 1px solid #d7b4b4;
+  background: #fff1f1;
+  color: #7b2323;
+  border-radius: 10px;
+  padding: 0.45rem 0.65rem;
+  cursor: pointer;
+  min-height: 36px;
 }
 
 .checkout-row {
