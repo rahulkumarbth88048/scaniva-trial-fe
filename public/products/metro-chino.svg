@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="840" height="560" viewBox="0 0 840 560" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="840" y2="560" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F6F2DE"/>
+      <stop offset="1" stop-color="#E8DFC0"/>
+    </linearGradient>
+    <linearGradient id="pant" x1="330" y1="110" x2="510" y2="480" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#6E785B"/>
+      <stop offset="1" stop-color="#4D553E"/>
+    </linearGradient>
+  </defs>
+  <rect width="840" height="560" rx="28" fill="url(#bg)"/>
+  <circle cx="115" cy="124" r="82" fill="#DDD4AE"/>
+  <circle cx="708" cy="440" r="100" fill="#D7C99A"/>
+  <path d="M332 118H508L525 210L481 472H411L420 294H420L429 472H359L315 210L332 118Z" fill="url(#pant)"/>
+  <path d="M332 118H508V154H332V118Z" fill="#525A43"/>
+  <path d="M419 118H421V472H419V118Z" stroke="#3A4131" stroke-width="6"/>
+  <text x="44" y="86" fill="#5B512E" font-size="36" font-family="Trebuchet MS, sans-serif" font-weight="700">Metro Chino</text>
+</svg>

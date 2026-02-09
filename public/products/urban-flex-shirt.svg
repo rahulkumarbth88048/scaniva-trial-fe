@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="840" height="560" viewBox="0 0 840 560" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="840" y2="560" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#EAF5FF"/>
+      <stop offset="1" stop-color="#DCEBFF"/>
+    </linearGradient>
+    <linearGradient id="shirt" x1="320" y1="120" x2="520" y2="470" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#253760"/>
+      <stop offset="1" stop-color="#162340"/>
+    </linearGradient>
+  </defs>
+  <rect width="840" height="560" rx="28" fill="url(#bg)"/>
+  <circle cx="675" cy="120" r="74" fill="#C9DCF8"/>
+  <circle cx="150" cy="430" r="98" fill="#BDD4F2"/>
+  <path d="M324 121L255 184L296 245L341 210V454H499V210L544 245L585 184L516 121L476 143H364L324 121Z" fill="url(#shirt)"/>
+  <path d="M364 143H476L450 196H390L364 143Z" fill="#314876"/>
+  <path d="M393 250H447V454H393V250Z" fill="#1D2C4C"/>
+  <text x="44" y="86" fill="#2A3D64" font-size="36" font-family="Trebuchet MS, sans-serif" font-weight="700">Urban Flex Shirt</text>
+</svg>
