@@ -1,8 +1,32 @@
 "use client";
-
+import { useRef } from "react";
 import Link from "next/link";
 
 export default function SignupPage() {
+  const inputsRef = useRef<(HTMLInputElement | null)[]>([]);
+
+const handleChange = (
+  e: React.ChangeEvent<HTMLInputElement>,
+  index: number
+) => {
+  const value = e.target.value;
+
+  // Allow only numbers
+  if (!/^[0-9]?$/.test(value)) return;
+
+  if (value && index < 5) {
+    inputsRef.current[index + 1]?.focus();
+  }
+};
+
+const handleKeyDown = (
+  e: React.KeyboardEvent<HTMLInputElement>,
+  index: number
+) => {
+  if (e.key === "Backspace" && !e.currentTarget.value && index > 0) {
+    inputsRef.current[index - 1]?.focus();
+  }
+};
   return (
     <div className="min-h-screen flex flex-col bg-[#f5f5f5] pb-14">
 
@@ -89,15 +113,21 @@ export default function SignupPage() {
             </button>
 
             {/* OTP Boxes */}
-            <div className="flex justify-between mb-6">
-              {[...Array(6)].map((_, i) => (
-                <input
-                  key={i}
-                  maxLength={1}
-                  className="w-12 h-12 text-center border rounded-md outline-none focus:ring-2 focus:ring-black"
-                />
-              ))}
-            </div>
+<div className="flex justify-between mt-6 mb-6">
+  {[...Array(6)].map((_, i) => (
+    <input
+      key={i}
+      type="text"
+      maxLength={1}
+      ref={(el) => {
+        inputsRef.current[i] = el;
+      }}
+      onChange={(e) => handleChange(e, i)}
+      onKeyDown={(e) => handleKeyDown(e, i)}
+      className="w-12 h-12 text-center border rounded-md outline-none focus:ring-2 focus:ring-black"
+    />
+  ))}
+</div>
 
             {/* Signup Button */}
             <button className="w-full bg-yellow-400 text-black font-bold py-3 rounded-full text-lg hover:opacity-90 transition">
