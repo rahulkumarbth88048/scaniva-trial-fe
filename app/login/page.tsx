@@ -39,12 +39,12 @@ const handleKeyDown = (
           {/* Product 1 */}
           <div className="text-center">
             <img
-              src="/product1.jpg"
+              src="/product1-1.jpg"
               alt="Product 1"
               className="h-[420px] object-contain"
             />
-            <p className="mt-4 font-semibold">Urban Printed Shirt</p>
-            <p className="text-sm text-gray-500">Slim Fit</p>
+            <p className="mt-4 font-semibold">Iced Light Blue Abstract Print</p>
+            <p className="text-sm text-gray-500">Slim Fit Casual Shirt</p>
             <div className="mt-2">
               <span className="line-through text-gray-400 mr-2">₹799</span>
               <span className="font-bold text-black">₹499</span>
@@ -54,15 +54,15 @@ const handleKeyDown = (
           {/* Product 2 */}
           <div className="text-center">
             <img
-              src="/product2.jpg"
+              src="/product2-1.jpg"
               alt="Product 2"
               className="h-[420px] object-contain"
             />
-            <p className="mt-4 font-semibold">Beige Casual Shirt</p>
-            <p className="text-sm text-gray-500">Regular Fit</p>
+            <p className="mt-4 font-semibold">Beige Floral Print Stretch</p>
+            <p className="text-sm text-gray-500">Slim Fit Casual Shirt</p>
             <div className="mt-2">
-              <span className="line-through text-gray-400 mr-2">₹799</span>
-              <span className="font-bold text-black">₹499</span>
+              <span className="line-through text-gray-400 mr-2">₹999</span>
+              <span className="font-bold text-black">₹699</span>
             </div>
           </div>
 
@@ -128,9 +128,11 @@ const handleKeyDown = (
               </a>
             </p>
 
-            <p className="mt-3 text-xs text-gray-500 text-center">
-              Wants to change language?{" "}
-              <span className="text-red-500 cursor-pointer">English</span>
+            <p className="mt-3 text-sm text-center">
+              login {" "}
+              <a href="/mainpage" className="text-red-500 font-semibold">
+                later
+              </a>
             </p>
 
           </div>
