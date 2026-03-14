@@ -1,5 +1,7 @@
 "use client";
-import { useRef } from "react";
+import { useRef, useState } from "react";
+import Link from "next/link";
+import { products } from "@/app/data/products";
 
 export default function LoginPage() {
   const inputsRef = useRef<(HTMLInputElement | null)[]>([]);
@@ -27,46 +29,87 @@ const handleKeyDown = (
   }
 };
 
+const [startIndex, setStartIndex] = useState(0);
+
+const itemsPerSlide = 2;
+
+const visibleProducts = products.slice(startIndex, startIndex + itemsPerSlide);
+
+const nextProducts = () => {
+  if (startIndex + itemsPerSlide < products.length) {
+    setStartIndex(startIndex + itemsPerSlide);
+  } else {
+    setStartIndex(0);
+  }
+};
+
+const prevProducts = () => {
+  if (startIndex - itemsPerSlide >= 0) {
+    setStartIndex(startIndex - itemsPerSlide);
+  } else {
+    const lastStart = Math.max(products.length - itemsPerSlide, 0);
+    setStartIndex(lastStart);
+  }
+};
+
   return (
     <div className="min-h-screen flex flex-col bg-[#f5f5f5]">
       
       {/* Main Section */}
       <div className="flex flex-1">
 
-        {/* LEFT SIDE — PRODUCTS */}
-        <div className="w-1/2 hidden lg:flex items-center justify-center gap-10 px-10">
+        {/* LEFT SIDE — PRODUCTS SLIDER */}
+        <div className="w-1/2 hidden lg:flex items-center justify-center px-10 relative">
+          
+          {/* LEFT ARROW */}
+          <button
+            onClick={prevProducts}
+            className="absolute left-2 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full border border-gray-300 bg-white shadow hover:bg-gray-100 transition flex items-center justify-center text-xl"
+          >
+            ←
+          </button>
 
-          {/* Product 1 */}
-          <div className="text-center">
-            <img
-              src="/product1-1.jpg"
-              alt="Product 1"
-              className="h-[420px] object-contain"
-            />
-            <p className="mt-4 font-semibold">Iced Light Blue Abstract Print</p>
-            <p className="text-sm text-gray-500">Slim Fit Casual Shirt</p>
-            <div className="mt-2">
-              <span className="line-through text-gray-400 mr-2">₹799</span>
-              <span className="font-bold text-black">₹499</span>
-            </div>
+          {/* 1 ROW + 2 COLUMNS */}
+          <div className="grid grid-cols-2 gap-4 w-full">
+            {visibleProducts.map((product) => (
+              <Link key={product.id} href={`/product/${product.id}`}>
+                <div className="text-center cursor-pointer hover:scale-105 transition">
+                  <img
+                    src={product.image[0]}
+                    alt={product.name}
+                    className="h-[320px] w-full object-contain"
+                  />
+
+                  <p className="mt-3 font-semibold text-sm">
+                    {product.name}
+                  </p>
+
+                  <p className="text-xs text-gray-500">
+                    {product.type}
+                  </p>
+
+                  <div className="mt-1">
+                    <span className="line-through text-gray-400 mr-2 text-sm">
+                      ₹{product.price}
+                    </span>
+
+                    <span className="font-bold text-black text-sm">
+                      ₹{product.discountPrice}
+                    </span>
+                  </div>
+                </div>
+              </Link>
+            ))}
           </div>
-
-          {/* Product 2 */}
-          <div className="text-center">
-            <img
-              src="/product2-1.jpg"
-              alt="Product 2"
-              className="h-[420px] object-contain"
-            />
-            <p className="mt-4 font-semibold">Beige Floral Print Stretch</p>
-            <p className="text-sm text-gray-500">Slim Fit Casual Shirt</p>
-            <div className="mt-2">
-              <span className="line-through text-gray-400 mr-2">₹999</span>
-              <span className="font-bold text-black">₹699</span>
-            </div>
-          </div>
-
+          {/* RIGHT ARROW */}
+          <button
+            onClick={nextProducts}
+            className="absolute right-2 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full border border-gray-300 bg-white shadow hover:bg-gray-100 transition flex items-center justify-center text-xl"
+          >
+            →
+          </button>
         </div>
+        
 
         {/* RIGHT SIDE — LOGIN */}
         <div className="w-full lg:w-1/2 flex items-center justify-center px-6">
@@ -99,21 +142,21 @@ const handleKeyDown = (
             </button>
 
             {/* OTP Boxes */}
-<div className="flex justify-between mt-6 mb-6">
-  {[...Array(6)].map((_, i) => (
-    <input
-      key={i}
-      type="text"
-      maxLength={1}
-      ref={(el) => {
-        inputsRef.current[i] = el;
-      }}
-      onChange={(e) => handleChange(e, i)}
-      onKeyDown={(e) => handleKeyDown(e, i)}
-      className="w-12 h-12 text-center border rounded-md outline-none focus:ring-2 focus:ring-black"
-    />
-  ))}
-</div>
+            <div className="flex justify-between mt-6 mb-6">
+              {[...Array(6)].map((_, i) => (
+                <input
+                  key={i}
+                  type="text"
+                  maxLength={1}
+                  ref={(el) => {
+                    inputsRef.current[i] = el;
+                  }}
+                  onChange={(e) => handleChange(e, i)}
+                  onKeyDown={(e) => handleKeyDown(e, i)}
+                  className="w-12 h-12 text-center border rounded-md outline-none focus:ring-2 focus:ring-black"
+                />
+              ))}
+            </div>
 
             {/* Login Button */}
             <button className="w-full bg-yellow-400 text-black font-bold py-3 rounded-full text-lg hover:opacity-90 transition">
@@ -137,7 +180,6 @@ const handleKeyDown = (
 
           </div>
         </div>
-
       </div>
 
       {/* Bottom Offer Strip */}
@@ -152,7 +194,7 @@ const handleKeyDown = (
                 PAYMENT | FREE ALTERATION IN 30 MINUTES | TOUCH FOR STYLIST ASSISTANCE
             </span>
         </div>
-        </div>
+      </div>
 
     </div>
   );
